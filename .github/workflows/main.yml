@@ -24,6 +24,10 @@ jobs:
         nvm install 20
         nvm use 20
 
+    - name: Pull latest changes
+      run: |
+        git pull
+
     - name: Stop running servers
       run: |
         pkill -f node || true
