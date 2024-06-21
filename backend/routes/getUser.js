@@ -102,5 +102,39 @@ router.get('/getUsersByBatch', fetchuser, isAdmin, async (req, res) => {
 });
 
 
+router.get('/getUsersByPreviousBatches', fetchuser, isAdmin, async (req, res) => {
+  try {
+    const { years, trainingType } = req.query; // Add trainingType to destructuring
+
+    const currentYear = new Date().getFullYear();
+
+    if (!years || !trainingType) { // Check for trainingType
+      return res.status(400).json({ success: false, message: 'Years and training type are required' });
+    }
+
+    const yearInt = parseInt(years);
+    if (isNaN(yearInt) || yearInt <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid years value' });
+    }
+
+    const batches = [];
+    for (let i = 0; i < yearInt; i++) {
+      const startYear = currentYear - i;
+      const endYear = startYear + 4;
+      batches.push(`${startYear}-${endYear}`);
+    }
+
+    const users = await SignUp.find({
+      'userInfo.batch': { $in: batches },
+      role: 'user'
+    }).select(`crn email ${trainingType} userInfo`);
+
+    return res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Internal server error occurred' });
+  }
+});
+
 
 module.exports = router;
