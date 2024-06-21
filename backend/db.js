@@ -8,7 +8,7 @@ const URI = DB_URI;
 
 const db = async () => {
   try {
-    console.log(URI);
+    console.log(URI, "trying connection");
     await mongoose.connect(URI);
     console.log("connected mongodb successfully to");
 
