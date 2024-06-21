@@ -13,8 +13,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     - name: Set up Node.js using NVM
       run: |
@@ -23,6 +21,10 @@ jobs:
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install 20
         nvm use 20
+
+    - name: Pull latest changes
+      run: |
+        git pull
 
     - name: Stop running servers
       run: |
@@ -36,7 +38,7 @@ jobs:
     - name: Start backend server
       run: |
         cd backend
-        node index.js &
+        nohup node index.js &
       
 
     - name: Install client dependencies
@@ -55,4 +57,4 @@ jobs:
     - name: Serve client
       run: |
         cd client
-        serve -s dist &
+        nohup serve -s dist &
