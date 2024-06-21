@@ -11,12 +11,13 @@ jobs:
 
     steps:
       - name: Pull latest changes
+        working-directory: /home/training-runner/training-tracker-cse/
         run: |
           git pull
 
       - name: Install backend dependencies
+        working-directory: /home/training-runner/training-tracker-cse/backend/
         run: |
-          cd backend
           npm install
 
       - name: Start backend server
@@ -24,13 +25,13 @@ jobs:
           sudo systemctl restart training-tracker
 
       - name: Install client dependencies
+        working-directory: /home/training-runner/training-tracker-cse/client
         run: |
-          cd client
           npm install
 
       - name: Build client
+        working-directory: /home/training-runner/training-tracker-cse/client
         run: |
-          cd client
           npm run build
 
       - name: Serve client
