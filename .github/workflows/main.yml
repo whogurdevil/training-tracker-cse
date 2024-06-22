@@ -4,57 +4,36 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
+      - name: Pull latest changes
+        working-directory: /home/training-runner/training-tracker-cse/
+        run: |
+          git pull
 
-    - name: Set up Node.js using NVM
-      run: |
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm install 20
-        nvm use 20
+      - name: Install backend dependencies
+        working-directory: /home/training-runner/training-tracker-cse/backend/
+        run: |
+          npm install
 
-    - name: Pull latest changes
-      run: |
-        git pull
+      - name: Start backend server
+        run: |
+          sudo systemctl restart training-tracker
 
-    - name: Stop running servers
-      run: |
-        pkill -f node || true
+      - name: Install client dependencies
+        working-directory: /home/training-runner/training-tracker-cse/client
+        run: |
+          npm install
 
-    - name: Install backend dependencies
-      run: |
-        cd backend
-        npm install
+      - name: Build client
+        working-directory: /home/training-runner/training-tracker-cse/client
+        run: |
+          npm run build
 
-    - name: Start backend server
-      run: |
-        cd backend
-        nohup node index.js &
-      
-
-    - name: Install client dependencies
-      run: |
-        cd client
-        npm install
-
-    - name: Build client
-      run: |
-        cd client
-        npm run build
-
-    - name: Install serve globally
-      run: npm install -g serve
-
-    - name: Serve client
-      run: |
-        cd client
-        nohup serve -s dist &
+      - name: Serve client
+        run: |
+          sudo systemctl restart training-tracker-client
