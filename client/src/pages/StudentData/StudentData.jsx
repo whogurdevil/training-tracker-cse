@@ -141,6 +141,11 @@ const SuperAdminForm = () => {
               row.original[selectedTraining]?.isPlaced ? "Yes" : "No",
           },
           {
+            accessorKey: `${selectedTraining}.package`,
+            header: "Package",
+           
+          },
+          {
             accessorKey: `${selectedTraining}.highStudy`,
             header: "Higher Study",
             Cell: ({ row }) =>
@@ -336,7 +341,7 @@ const SuperAdminForm = () => {
               onChange={handleBatchChange}
             >
               <MenuItem value="" sx={{ maxHeight: "200px" }}>
-                All
+                None
               </MenuItem>
               {allBatches.map((data, index) => (
                 <MenuItem key={index} value={data}>

@@ -97,7 +97,7 @@ const EditProfile = () => {
       if (data) {
         const datePickerBatch = convertBatchToDate(userInfoData.batch);
         setFormData({ ...data });
-        setuserInfo({ ...userInfoData, batch: datePickerBatch });
+        setuserInfo({ ...userInfoData });
 
         setAdmissionYear(datePickerBatch);
         setFetchError(false);
