@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import jsPDF from 'jspdf';
 import axios from 'axios';
-import { Box, Button, Grid, FormControl, MenuItem, TextField, LinearProgress } from '@mui/material';
+import { Box, Button, Grid, FormControl, MenuItem, TextField, LinearProgress, Typography } from '@mui/material';
 import BarGraph from '../../Components/Charts/BarGraph';
 import LineGraph from '../../Components/Charts/genderGraph';
 import CompanyGraph from '../../Components/Charts/companyGraph';
@@ -74,6 +74,9 @@ const PlacementStats = () => {
 
     return (
         <div style={{ marginBottom: "100px" }}>
+            {loading && (
+                <LinearProgress />
+            )}
             <Box
                 sx={{
                     marginTop: '2rem',
@@ -98,8 +101,8 @@ const PlacementStats = () => {
             </Box>
 
             {loading ? (
-                <Box sx={{ width: '100%', marginTop: '2rem' }}>
-                    <LinearProgress />
+                <Box sx={{ width: '100%', display: 'flex', height: '100px', justifyContent: 'center', alignItems: 'center' }}>
+                    <Typography>Fetching Data ....</Typography>
                 </Box>
             ) : (
                 <Grid

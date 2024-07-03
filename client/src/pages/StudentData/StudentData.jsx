@@ -42,6 +42,7 @@ import {
   viewCertificate,
   getTrainingOptions,
   fetchBatches,
+  getAllData,
 } from "../../utils/AdminFunctions";
 import { TextField } from "@mui/material";
 import PlacementModal from "../../Components/PlacementModal";
@@ -96,16 +97,20 @@ const SuperAdminForm = () => {
         setLoading(true);
 
         const usersData = await fetchUsers(selectedBatch, selectedTraining);
-        if (usersData && usersData.users) {
-          setUsers(usersData.users);
+        if (usersData) {
+
+          setUsers(usersData);
         } else {
+
           setUsers([]);
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
         setUsers([]); // Reset users state or handle as needed
       } finally {
+
         setLoading(false);
+
       }
     } else {
       setUsers([]);
@@ -113,11 +118,17 @@ const SuperAdminForm = () => {
     }
   };
 
+
   const navigateToStats = (data) => {
     return navigate("/superadmin/placementStats", { state: { data } });
   };
-  const handleViewCertificate = (row) => {
-    viewCertificate(row, selectedTraining);
+  const handleViewCertificate = (row, training, certificateType) => {
+    if (selectedTraining === "all") {
+      viewCertificate(row, training, certificateType);
+    } else {
+      viewCertificate(row, selectedTraining);
+    }
+
   };
 
   const columns = useMemo(() => {
@@ -126,7 +137,6 @@ const SuperAdminForm = () => {
       { accessorKey: "userInfo.Name", header: "Name" },
       { accessorKey: "userInfo.urn", header: "URN" },
       { accessorKey: "userInfo.mentor", header: "Mentor" },
-      { accessorKey: "userInfo.batch", header: "Batch" },
       { accessorKey: "userInfo.section", header: "Section" },
       { accessorKey: "userInfo.contact", header: "Contact" },
     ];
@@ -137,25 +147,22 @@ const SuperAdminForm = () => {
           {
             accessorKey: `${selectedTraining}.isPlaced`,
             header: "Placement Status",
-            Cell: ({ row }) =>
-              row.original[selectedTraining]?.isPlaced ? "Yes" : "No",
-          },
-          {
-            accessorKey: `${selectedTraining}.package`,
-            header: "Package",
-           
+            Cell: ({ row }) => (row.original[selectedTraining]?.isPlaced ? "Yes" : "No"),
           },
           {
             accessorKey: `${selectedTraining}.highStudy`,
             header: "Higher Study",
-            Cell: ({ row }) =>
-              row.original[selectedTraining]?.highStudy ? "Yes" : "No",
+            Cell: ({ row }) => (row.original[selectedTraining]?.highStudy ? "Yes" : "No"),
           },
           {
             accessorKey: `${selectedTraining}.gateStatus`,
             header: "Gate Status",
-            Cell: ({ row }) =>
-              row.original[selectedTraining]?.gateStatus ? "Yes" : "No",
+            Cell: ({ row }) => (row.original[selectedTraining]?.gateStatus ? "Yes" : "No"),
+          },
+          {
+            accessorKey: `${selectedTraining}.package`,
+            header: "Package",
+
           },
           {
             accessorKey: "viewMore",
@@ -169,16 +176,15 @@ const SuperAdminForm = () => {
                 style={{ cursor: "pointer" }}
               />
             ),
-          },
+          }
         );
       }
-      if (selectedTraining !== "placementData") {
+      if (selectedTraining !== "placementData" && selectedTraining !== "all") {
         customColumns.push(
           {
             accessorKey: `${selectedTraining}.technology`,
             header: "Technology",
-            Cell: ({ row }) =>
-              row.original[selectedTraining]?.technology.join(" , "),
+            Cell: ({ row }) => row.original[selectedTraining]?.technology.join(" , "),
           },
           {
             accessorKey: `${selectedTraining}.organization`,
@@ -196,35 +202,132 @@ const SuperAdminForm = () => {
             accessorKey: `${selectedTraining}.certificate`,
             header: "Certificate",
             Cell: ({ row }) => (
+              // console.log(row.original.tr101.certificate) ,
               <PictureAsPdfIcon
+                color={row.original[selectedTraining]?.certificate ? "primary" : 'disabled'}
                 onClick={() => handleViewCertificate(row)}
                 style={{ cursor: "pointer" }}
               />
             ),
-          },
+          }
         );
       }
+      if (selectedTraining === "all") {
+        customColumns.push(
+          {
 
+            accessorKey: "tr101.certificate",
+            header: "Tr101 Certificate",
+            Cell: ({ row }) => (
+
+              <PictureAsPdfIcon
+                color={row.original.tr101?.certificate ? "primary" : 'disabled'}
+                onClick={() => handleViewCertificate(row, "tr101")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+          {
+            accessorKey: "tr102.certificate",
+            header: "Tr102 Certificate",
+            Cell: ({ row }) => (
+              <PictureAsPdfIcon
+                color={row.original.tr102?.certificate ? "primary" : 'disabled'}
+                onClick={() => handleViewCertificate(row, "tr102")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+          {
+            accessorKey: "tr103.certificate",
+            header: "Tr103 Certificate",
+            Cell: ({ row }) => (
+              <PictureAsPdfIcon
+                color={row.original.tr103?.certificate ? "primary" : 'disabled'}
+                onClick={() => handleViewCertificate(row, "tr103")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+          {
+            accessorKey: "tr104.certificate",
+            header: "Tr104 Certificate",
+            Cell: ({ row }) => (
+              <PictureAsPdfIcon
+                color={row.original.tr104?.certificate ? "primary" : "disabled"}
+                onClick={() => handleViewCertificate(row, "tr104")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+          {
+            accessorKey: `${selectedTraining}.isPlaced`,
+            header: "Placement Status",
+            Cell: ({ row }) => (row.original[selectedTraining]?.isPlaced ? "Yes" : "No"),
+          },
+          {
+            accessorKey: `${selectedTraining}.highStudy`,
+            header: "Higher Study",
+            Cell: ({ row }) => (row.original[selectedTraining]?.highStudy ? "Yes" : "No"),
+          },
+          {
+            accessorKey: `${selectedTraining}.gateStatus`,
+            header: "Gate Status",
+            Cell: ({ row }) => (row.original[selectedTraining]?.gateStatus ? "Yes" : "No"),
+          },
+          {
+            accessorKey: `${selectedTraining}.package`,
+            header: "Package",
+
+          },
+          {
+            accessorKey: "placementData.appointmentLetter",
+            header: "Appointment Letter",
+            Cell: ({ row }) => (
+              <PictureAsPdfIcon
+                color={row.original.placementData?.appointmentLetter ? "primary" : "disabled"}
+                onClick={() => handleViewCertificate(row, "placementData", "appointmentLetter")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+          {
+            accessorKey: "placementData.gateCertificate",
+            header: "Gate Admit Card/Score Card",
+            Cell: ({ row }) => (
+              <PictureAsPdfIcon
+                color={row.original.placementData?.gateCertificate ? "primary" : "disabled"}
+                onClick={() => handleViewCertificate(row, "placementData", "gateCertificate")}
+                style={{ cursor: "pointer" }}
+              />
+            ),
+          },
+
+        );
+      }
       // Add the "Verified" and "Mark Verification" columns at the end
-      customColumns.push(
-        {
-          accessorKey: `${selectedTraining}.lock`,
-          header: "Verified",
-          Cell: ({ row }) =>
-            row.original[selectedTraining]?.lock ? "Yes" : "No",
-        },
-        {
-          accessorKey: "edit",
-          header: "Mark Verification",
-          Cell: ({ row }) => (
-            <VerificationIcon
-              lockStatus={row.original[selectedTraining]?.lock}
-              handleLock={handleLock}
-              row={row}
-            />
-          ),
-        },
-      );
+      if (selectedTraining !== "all") {
+
+
+        customColumns.push(
+          {
+            accessorKey: `${selectedTraining}.lock`,
+            header: "Verified",
+            Cell: ({ row }) => (row.original[selectedTraining]?.lock ? "Yes" : "No"),
+          },
+          {
+            accessorKey: "edit",
+            header: "Mark Verification",
+            Cell: ({ row }) => (
+              <VerificationIcon
+                lockStatus={row.original[selectedTraining]?.lock}
+                handleLock={handleLock}
+                row={row}
+              />
+            ),
+          }
+        );
+      }
     }
 
     return customColumns;
@@ -294,14 +397,14 @@ const SuperAdminForm = () => {
     data: users,
     columns,
     localization: {
-      noRecordsToDisplay:
-        "Please Select Branch , Batch and Training type to view data.",
+      noRecordsToDisplay: 'Please Select Branch , Batch and Training type to view data.'
     },
+
+
   });
 
   // Function to handle refreshing data after verification status change
   const handleRefresh = () => {
-    console.log("handle refresh called");
     setRefresh((prevRefresh) => !prevRefresh);
   };
 
@@ -376,7 +479,7 @@ const SuperAdminForm = () => {
                 label={"Training"}
                 onChange={handleTrainingChange}
               >
-                <MenuItem value="">All</MenuItem>
+                <MenuItem value="">None</MenuItem>
                 {Array.from(
                   { length: trainingNames[0]["Training_No"] },
                   (_, index) => {
@@ -396,6 +499,7 @@ const SuperAdminForm = () => {
                 <MenuItem value="placementData">
                   {trainingNames[0]["Placement_name"]}
                 </MenuItem>
+                <MenuItem value="all">All</MenuItem>
               </TextField>
             </FormControl>
           </Grid>
