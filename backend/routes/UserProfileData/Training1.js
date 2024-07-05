@@ -4,6 +4,8 @@ const SignUpdata = require('../../models/UserInfo').SignUp;
 const router = express.Router();
 const fetchuser = require('../../middleware/fetchUser');
 const isAdmin = require('../../middleware/isAdmin');
+const logEntry = require('../../models/logs')
+const getUserCrn = require('../../utils/getAdminDetails')
 // Route to create a new user profile
 router.post('/', fetchuser, async (req, res) => {
     try {
@@ -51,6 +53,13 @@ router.post('/updatelock', fetchuser, isAdmin, async (req, res) => {
         if (!userData) {
             return res.status(404).json({ success: false, message: 'User data not found' });
         }
+        const token = req.header('auth-token')
+        const adminCrn = getUserCrn(token)
+        const newLogEntry = new logEntry({
+            user: adminCrn,
+            logMessage: `Verified Status for ${crn} is updated to ${lock} in tr101`
+        });
+        newLogEntry.save()
 
         // Respond with the updated user data
         res.status(200).json({ success: true });
@@ -76,9 +85,12 @@ router.get('/:crn', fetchuser, async (req, res) => {
 router.post('/verifyall', fetchuser, isAdmin, async (req, res) => {
     try {
         // Get all users with the role "user"
-        const usersToUpdate = await SignUpdata.find({ role: 'user' });
-        if (!usersToUpdate) {
-            return res.status(404).json({ message: 'No users found' });
+        const { batch } = req.body
+
+        const usersToUpdate = await SignUpdata.find({ role: 'user', 'userInfo.batch': batch });
+
+        if (usersToUpdate.length === 0) {
+            return res.status(404).json({ message: 'No users found with the specified batch and role' });
         }
 
         // Update the lock status for all users
@@ -87,14 +99,20 @@ router.post('/verifyall', fetchuser, isAdmin, async (req, res) => {
                 if (user.tr101) {
                     user.tr101.lock = true; // Set lock status to true
                     await user.save();
-                } 
+                }
                 return user;
             } catch (err) {
                 console.error(`Error updating user with CRN ${user.crn}: ${err.message}`);
                 throw err; // Propagate error to stop execution
             }
         }));
-
+        const token = req.header('auth-token')
+        const adminCrn = getUserCrn(token)
+        const newLogEntry = new logEntry({
+            user: adminCrn,
+            logMessage: `Verified Status for all Students of ${batch} is updated to true for tr101`
+        });
+        newLogEntry.save()
         // Respond with the updated user data
         res.status(200).json({ success: true });
     } catch (error) {
@@ -104,9 +122,12 @@ router.post('/verifyall', fetchuser, isAdmin, async (req, res) => {
 router.post('/unverifyall', fetchuser, isAdmin, async (req, res) => {
     try {
         // Get all users with the role "user"
-        const usersToUpdate = await SignUpdata.find({ role: 'user' });
-        if (!usersToUpdate) {
-            return res.status(404).json({ message: 'No users found' });
+        const { batch } = req.body
+
+        const usersToUpdate = await SignUpdata.find({ role: 'user', 'userInfo.batch': batch });
+
+        if (usersToUpdate.length === 0) {
+            return res.status(404).json({ message: 'No users found with the specified batch and role' });
         }
 
         // Update the lock status for all users
@@ -115,13 +136,20 @@ router.post('/unverifyall', fetchuser, isAdmin, async (req, res) => {
                 if (user.tr101) {
                     user.tr101.lock = false; // Set lock status to true
                     await user.save();
-                } 
+                }
                 return user;
             } catch (err) {
                 console.error(`Error updating user with CRN ${user.crn}: ${err.message}`);
                 throw err; // Propagate error to stop execution
             }
         }));
+        const token = req.header('auth-token')
+        const adminCrn = getUserCrn(token)
+        const newLogEntry = new logEntry({
+            user: adminCrn,
+            logMessage: `Verified Status for all Students of ${batch} is updated to false for tr101`
+        });
+        newLogEntry.save()
 
         // Respond with the updated user data
         res.status(200).json({ success: true });

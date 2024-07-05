@@ -21,6 +21,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { validateField, errorMessages } from "../../utils/ErrorFunctions";
 import { convertBatchToDate } from "../../utils/DateConvertToFrontend";
+import { decodeAuthToken } from "../../utils/AdminFunctions";
 // API_URL should point to your backend API endpoint
 const API_URL =
   import.meta.env.VITE_ENV === "production"
@@ -42,6 +43,7 @@ const EditProfile = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
   const [admissionYear, setAdmissionYear] = useState(null);
+  const [adminCrn, setAdminCrn] = useState(null)
 
   const [passwordState, setPasswordState] = useState({
     password: "",
@@ -119,6 +121,8 @@ const EditProfile = () => {
   };
   const hanldeChangePassword = async () => {
     try {
+
+
       const passwordError = validateField('password', passwordState.password
       );
       const confirmPasswordError = validateField('confirmPassword', passwordState.confirmPassword, passwordState);
@@ -135,17 +139,19 @@ const EditProfile = () => {
       setIsEditing(false);
       setIsChanged(false);
       const token = localStorage.getItem("authtoken");
+      const AdminId = decodeAuthToken(token)
+      setAdminCrn(AdminId)
       // Make PUT request to update data with editedData
-      const response = await fetch(`${API_URL}password/updatepassword`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "auth-token": token },
-        body: JSON.stringify({
-          crn: crn,
-          password: passwordState.password,
-        }),
+      const response = await axios.post(`${API_URL}password/updatepassword`, {
+        crn: crn,
+        password: passwordState.password,
+        adminCrn: adminCrn
+      }, {
+        headers: { "Content-Type": "application/json", "auth-token": token }
       });
 
-      if (response.ok) {
+
+      if (response.data.success) {
         setLoading(false);
         setShowModal2(false);
         toast.success("Succesfully Changed Password");
@@ -159,7 +165,7 @@ const EditProfile = () => {
           confirmPassword: "",
         });
       } else {
-        toast.error(json.message);
+        toast.error(response.data.message);
         setLoading(false);
         setShowModal2(false);
       }
@@ -167,8 +173,12 @@ const EditProfile = () => {
       // Close the modal after data is submitted successfully
     } catch (error) {
       console.error("Error submitting data:", error);
-      toast.error("Failed to Change Password");
-      setLoading(false); // Set loading state to false in case of error
+      if (error.response && error.response.status === 403) {
+        toast.error("You are not authorized to change this password.");
+      } else {
+        toast.error("Failed to Change Password");
+      }
+      setLoading(false);
     }
   };
 
@@ -180,6 +190,7 @@ const EditProfile = () => {
         const error = validateField(key, formData[key]);
         return error ? { ...acc, [key]: error } : acc;
       }, {});
+      console.log(userInfo)
       // Validate userInfo
       const userInfoErrors = Object.keys(userInfo).reduce((acc, key) => {
         const error = validateField(key, userInfo[key]);

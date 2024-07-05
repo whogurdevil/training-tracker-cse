@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,CircularProgress } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL;
 
-const UnVerifyAllComponent = ({ selectedTraining , onRefresh, refresh}) => {
+const UnVerifyAllComponent = ({ selectedTraining, onRefresh, refresh, batch }) => {
     const [open, setOpen] = useState(false);
-        const [loading,setLoading]=useState(false);
-    
+    const [loading, setLoading] = useState(false);
+
 
     const handleUnVerifyAll = async () => {
         setOpen(true);
@@ -34,7 +34,7 @@ const UnVerifyAllComponent = ({ selectedTraining , onRefresh, refresh}) => {
             }
 
             // Send a POST request to the backend API endpoint
-            const response = await axios.post(url, {}, {
+            const response = await axios.post(url, { batch: batch }, {
                 headers: {
                     'auth-token': token
                 }
