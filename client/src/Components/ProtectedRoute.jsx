@@ -14,7 +14,7 @@ import Signup from "../pages/Authentication/Signup";
 import Login from "../pages/Authentication/Login";
 import Verify from "../pages/Authentication/Verify";
 import ForgotPassword from "../pages/Authentication/Forgotpassword"
-import Logs from "../pages/Logs/Logs";
+import Logs from "../pages/LogsPage/LogsPage";
 
 const ProtectedRoute = ({ component: Component, path, ...rest }) => {
     const authToken = localStorage.getItem("authtoken");

@@ -16,7 +16,7 @@ import TrainingNames from "./pages/TrainingNamesController/TrainingNames";
 import Footer from "./Components/Footer";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import StudentData from "./pages/StudentData/StudentData";
-import Logs from "./pages/Logs/Logs";
+import Logs from "./pages/LogsPage/LogsPage";
 
 class App extends Component {
   render() {
