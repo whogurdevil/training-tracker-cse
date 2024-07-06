@@ -404,7 +404,6 @@ const SuperAdminForm = () => {
 
   // Function to handle refreshing data after verification status change
   const handleRefresh = () => {
-    console.log("handle refresh called");
     setRefresh((prevRefresh) => !prevRefresh);
   };
 

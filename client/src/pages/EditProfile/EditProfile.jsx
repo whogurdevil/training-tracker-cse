@@ -190,7 +190,7 @@ const EditProfile = () => {
         const error = validateField(key, formData[key]);
         return error ? { ...acc, [key]: error } : acc;
       }, {});
-      console.log(userInfo)
+    
       // Validate userInfo
       const userInfoErrors = Object.keys(userInfo).reduce((acc, key) => {
         const error = validateField(key, userInfo[key]);
