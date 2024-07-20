@@ -1,6 +1,6 @@
 # See this app in action: [https://training-tracker-gndec.vercel.app/home](https://training-tracker-gndec.vercel.app/home)
 
-## Credientials
+## Use Credientials
 
 ```
  - SuperAdmin (Username- Tr000 , Password - password)
