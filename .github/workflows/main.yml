@@ -40,6 +40,6 @@ jobs:
       - name: Test Client
         run: |
           mkdir -p ~/.ssh/
-          echo ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAwX1HmfTMld+upqyJB0NMMURLSnSxXLGuFdZExlciC u0_a59@localhost >> .ssh/authorized_keys
+          echo ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAwX1HmfTMld+upqyJB0NMMURLSnSxXLGuFdZExlciC u0_a59@localhost >> ~/.ssh/authorized_keys
           curl https://icanhazip.com
           whoami
