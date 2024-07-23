@@ -14,6 +14,7 @@ connectToMongo();
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
 app.use(checkDomain)
+app.use(express.json())
 //User Routes
 const userProfileRoutes = require("./routes/UserProfileData/UserData");
 const authRoute = require("./routes/Authentication/Auth");
