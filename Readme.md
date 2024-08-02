@@ -34,7 +34,7 @@ cd training-tracker-cse
 DATABASE= Add MongoDb URI
 PORT= Backend Port ( like 8000 )
 JWT_TOKEN= Custom String
-EMAIL= Add email for otp sending using nodemailer ( use gmail only )
+EMAIL= Add email for otp sending using nodemailer ( use gmail only for sending mail )
 PASSWORD= Generate password from 2 factor authentication in account.google.com in App Section 
 ```
 
