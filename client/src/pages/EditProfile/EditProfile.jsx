@@ -43,6 +43,7 @@ const EditProfile = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
   const [admissionYear, setAdmissionYear] = useState(null);
+  const [token, setToken] = useState(null)
   const [adminCrn, setAdminCrn] = useState(null)
 
   const [passwordState, setPasswordState] = useState({
@@ -343,7 +344,8 @@ const EditProfile = () => {
   };
   useEffect(
     () => {
-
+      const token = localStorage.getItem("authtoken");
+      setToken(token)
       const AdminId = decodeAuthToken(token)
       setAdminCrn(AdminId)
     }
