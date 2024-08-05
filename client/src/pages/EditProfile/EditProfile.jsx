@@ -139,8 +139,7 @@ const EditProfile = () => {
       setIsEditing(false);
       setIsChanged(false);
       const token = localStorage.getItem("authtoken");
-      const AdminId = decodeAuthToken(token)
-      setAdminCrn(AdminId)
+ 
       // Make PUT request to update data with editedData
       const response = await axios.post(`${API_URL}password/updatepassword`, {
         crn: crn,
@@ -342,6 +341,13 @@ const EditProfile = () => {
       [name]: validateField(name, value),
     }));
   };
+  useEffect(
+    () => {
+
+      const AdminId = decodeAuthToken(token)
+      setAdminCrn(AdminId)
+    }
+    , [])
 
   return (
     <Container style={{ marginTop: "100px" }}>
