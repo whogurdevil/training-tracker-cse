@@ -70,9 +70,6 @@ export default function Form() {
           setFormData(userData);
           setCertificate(userData.certificate);
           setIsEditing(false);
-          if (number === "101" && userData.organization === "Guru Nanak Dev Engineering College , Ludhiana") {
-            setOptionCertificate(true)
-          }
           if (userData.lock) {
             setIsLock(true)
           } else {
@@ -108,11 +105,9 @@ export default function Form() {
       if (number === "101") {
         setOptionCertificate(true)
       }
-    } else if (name === 'organizationType' && value !== 'gndec') {
-      setOptionCertificate(false)
     }
     else {
-
+      setOptionCertificate(false)
       setFormData({ ...formData, [name]: value });
     }
 
@@ -127,32 +122,38 @@ export default function Form() {
       if (formData.organization.length === 0) {
         formErrors.organization = 'Organization cannot be blank';
         toast.error(formErrors.organization)
+        setLoading(false)
         return;
       }
       if (formData.technology.length === 0) {
         formErrors.technology = 'Technology cannot be blank';
         toast.error(formErrors.technology)
+        setLoading(false)
         return;
       }
       if (!formData.projectName.trim()) {
         formErrors.projectName = 'Project Title cannot be blank';
         toast.error(formErrors.projectName)
+        setLoading(false)
         return;
       }
       if (!formData.type.trim()) {
         formErrors.type = 'Training type cannot be blank';
         toast.error(formErrors.type)
+        setLoading(false)
         return;
 
       }
       if (optionalCertificate === false && !formData.certificate) {
         formErrors.certificate = 'Certificate is blank ';
         toast.error(formErrors.certificate)
+        setLoading(false)
         return;
       }
       if (!formData.organizationType.trim()) {
         formErrors.organizationType = 'Organization-Type cannot be blank';
         toast.error("Organization-Type cannot be blank")
+        setLoading(false)
         return;
       }
 
@@ -160,6 +161,7 @@ export default function Form() {
       if (Object.keys(formErrors).length > 0) {
         setErrors(formErrors);
         setLoading(false)
+
         return;
       }
       const fileErrors = handleFileErrors(filedata, optionalCertificate);
