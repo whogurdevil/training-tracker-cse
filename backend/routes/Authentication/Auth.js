@@ -91,7 +91,7 @@ router.post('/login', body('password', 'Password should have a minimum length of
   const user = await SignUp.findOne({ crn });
 
   if (!user) {
-    return res.status(400).json({ success: false, message: "User Not found" });
+    return res.status(400).json({ success: false, message: "User Not found. Please Sign Up first" });
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
