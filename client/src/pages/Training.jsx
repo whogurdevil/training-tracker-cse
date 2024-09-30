@@ -45,11 +45,12 @@ export default function Form() {
   const [optionalCertificate, setOptionCertificate] = useState(false)
 
   useEffect(() => {
-    if (number === "101") {
-      setOptionCertificate(true)
-    }
+ 
     const fetchData = async () => {
       try {
+        if (number === "101") {
+          setOptionCertificate(true)
+        }
         setLoading(true)
         const token = localStorage.getItem("authtoken");
         const crn = decodeAuthToken(token);
@@ -105,9 +106,12 @@ export default function Form() {
       if (number === "101") {
         setOptionCertificate(true)
       }
+    } else if (name === 'organizationType' && value !== 'gndec') {
+      setOptionCertificate(false)
+      setFormData({ ...formData, [name]: value });
     }
     else {
-      setOptionCertificate(false)
+
       setFormData({ ...formData, [name]: value });
     }
 
