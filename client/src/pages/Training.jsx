@@ -45,7 +45,7 @@ export default function Form() {
   const [optionalCertificate, setOptionCertificate] = useState(false)
 
   useEffect(() => {
- 
+
     const fetchData = async () => {
       try {
         if (number === "101") {
@@ -66,10 +66,12 @@ export default function Form() {
           userData.technology &&
           userData.projectName &&
           userData.type &&
-          userData.organizationType && userData.certificate
+          userData.organizationType
         ) {
           setFormData(userData);
-          setCertificate(userData.certificate);
+          if (certificate) {
+            setCertificate(userData.certificate)
+          }
           setIsEditing(false);
           if (userData.lock) {
             setIsLock(true)
@@ -234,7 +236,7 @@ export default function Form() {
         <Container style={{ paddingInline: 0, paddingBottom: 50, paddingTop: 10 }}>
           {!isLock && (
             <Button
-              disabled={loading || (!formData.organization || !formData.certificate || !formData.organizationType || !formData.organization || !formData.projectName || !formData.technology)}
+              disabled={loading || (!formData.organization || !formData.organizationType || !formData.projectName || !formData.technology)}
               onClick={handleEdit}
               color="primary"
               variant="contained"
