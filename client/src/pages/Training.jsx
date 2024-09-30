@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from "react";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import TextField from "@mui/material/TextField";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import MenuItem from "@mui/material/MenuItem";
-import FileBase from "react-file-base64";
-import Chip from "@mui/material/Chip";
-import Grid from "@mui/material/Grid";
-import EditIcon from "@mui/icons-material/Edit";
-import { useLocation } from "react-router-dom";
-import { base64toBlob, openBase64NewTab } from "../utils/base64topdf";
-import { technologyStack } from "../utils/technology";
-import { decodeAuthToken } from "../utils/AdminFunctions";
-import Autocomplete from "@mui/material/Autocomplete";
-import { LinearProgress, CircularProgress } from "@mui/material";
-import { handleFileErrors } from "../utils/ErrorFunctions";
+import React, { useState, useEffect } from 'react';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import TextField from '@mui/material/TextField';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import MenuItem from '@mui/material/MenuItem';
+import FileBase from 'react-file-base64';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import EditIcon from '@mui/icons-material/Edit';
+import { useLocation } from 'react-router-dom';
+import { base64toBlob, openBase64NewTab } from '../utils/base64topdf';
+import { technologyStack } from '../utils/technology';
+import { decodeAuthToken } from '../utils/AdminFunctions';
+import Autocomplete from '@mui/material/Autocomplete';
+import { LinearProgress, CircularProgress } from '@mui/material';
+import { handleFileErrors } from '../utils/ErrorFunctions';
 
-const API_URL =
-  import.meta.env.VITE_ENV === "production"
-    ? import.meta.env.VITE_PROD_BASE_URL
-    : import.meta.env.VITE_DEV_BASE_URL;
+const API_URL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL
+
 
 export default function Form() {
   const [formData, setFormData] = useState({
-    organization: "",
+    organization: '',
     technology: [],
-    projectName: "",
-    type: "",
+    projectName: '',
+    type: '',
     certificate: null,
-    organizationType: "",
+    organizationType: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -41,20 +39,24 @@ export default function Form() {
   const [isLock, setIsLock] = useState(false);
   const [certificate, setCertificate] = useState(null);
   let location = useLocation();
-  const [loading, setLoading] = useState(true);
-  const [filedata, selectedFiledata] = useState({});
-  const number = location.state && location.state.number;
+  const [loading, setLoading] = useState(true)
+  const [filedata, selectedFiledata] = useState({})
+  const number = location.state && location.state.number
+  const [optionalCertificate, setOptionCertificate] = useState(false)
 
   useEffect(() => {
+    if (number === "101") {
+      setOptionCertificate(true)
+    }
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setLoading(true)
         const token = localStorage.getItem("authtoken");
         const crn = decodeAuthToken(token);
         const response = await axios.get(`${API_URL}tr${number}/${crn}`, {
           headers: {
-            "auth-token": token,
-          },
+            "auth-token": token
+          }
         });
         const userData = response.data.data;
 
@@ -63,139 +65,148 @@ export default function Form() {
           userData.technology &&
           userData.projectName &&
           userData.type &&
-          userData.organizationType &&
-          userData.certificate
+          userData.organizationType && userData.certificate
         ) {
           setFormData(userData);
           setCertificate(userData.certificate);
           setIsEditing(false);
+          if (number === "101" && userData.organization === "Guru Nanak Dev Engineering College , Ludhiana") {
+            setOptionCertificate(true)
+          }
           if (userData.lock) {
-            setIsLock(true);
+            setIsLock(true)
           } else {
-            setIsLock(false);
+            setIsLock(false)
           }
         } else {
-          console.error("Error: Fetched data is incomplete.");
+          console.error('Error: Fetched data is incomplete.');
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
+        console.error('Error fetching data:', error);
+        setLoading(false)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     };
 
     fetchData();
   }, []);
 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "organizationType" && value === "gndec") {
+
+    if (name === 'organizationType' && value === 'gndec') {
       setFormData({
         ...formData,
         [name]: value,
-        organization: "Guru Nanak Dev Engineering College , Ludhiana",
+        organization: 'Guru Nanak Dev Engineering College , Ludhiana'
       });
-    } else {
+
+      if (number === "101") {
+        setOptionCertificate(true)
+      }
+    } else if (name === 'organizationType' && value !== 'gndec') {
+      setOptionCertificate(false)
+    }
+    else {
+
       setFormData({ ...formData, [name]: value });
     }
 
-    setErrors({ ...errors, [name]: "" });
+    setErrors({ ...errors, [name]: '' });
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
+    setLoading(true)
     e.preventDefault();
     try {
       const formErrors = {};
       if (formData.organization.length === 0) {
-        formErrors.organization = "Organization cannot be blank";
-        toast.error(formErrors.organization);
-        setLoading(false);
+        formErrors.organization = 'Organization cannot be blank';
+        toast.error(formErrors.organization)
         return;
       }
       if (formData.technology.length === 0) {
-        formErrors.technology = "Technology cannot be blank";
-        toast.error(formErrors.technology);
-        setLoading(false);
+        formErrors.technology = 'Technology cannot be blank';
+        toast.error(formErrors.technology)
         return;
       }
       if (!formData.projectName.trim()) {
-        formErrors.projectName = "Project Title cannot be blank";
-        toast.error(formErrors.projectName);
-        setLoading(false);
+        formErrors.projectName = 'Project Title cannot be blank';
+        toast.error(formErrors.projectName)
         return;
       }
       if (!formData.type.trim()) {
-        formErrors.type = "Training type cannot be blank";
-        toast.error(formErrors.type);
-        setLoading(false);
+        formErrors.type = 'Training type cannot be blank';
+        toast.error(formErrors.type)
         return;
+
       }
-      if (!formData.certificate) {
-        formErrors.certificate = "Certificate is blank ";
-        toast.error(formErrors.certificate);
-        setLoading(false);
+      if (optionalCertificate === false && !formData.certificate) {
+        formErrors.certificate = 'Certificate is blank ';
+        toast.error(formErrors.certificate)
         return;
       }
       if (!formData.organizationType.trim()) {
-        formErrors.organizationType = "Organization-Type cannot be blank";
-        toast.error("Organization-Type cannot be blank");
-        setLoading(false);
+        formErrors.organizationType = 'Organization-Type cannot be blank';
+        toast.error("Organization-Type cannot be blank")
         return;
       }
 
+
       if (Object.keys(formErrors).length > 0) {
         setErrors(formErrors);
-        setLoading(false);
+        setLoading(false)
         return;
       }
-      const fileErrors = handleFileErrors(filedata);
+      const fileErrors = handleFileErrors(filedata, optionalCertificate);
       if (Object.keys(fileErrors).length > 0) {
         // Display file-related errors
         setErrors({ ...errors, ...fileErrors });
-        setLoading(false);
+        setLoading(false)
         return;
       }
       const token = localStorage.getItem("authtoken");
       const crn = decodeAuthToken(token);
-      const url = `${API_URL}tr${number}`;
-      const response = await axios.post(
-        url,
-        { formData, crn: crn },
-        {
-          headers: {
-            "auth-token": token,
-          },
-        },
-      );
+      const url = `${API_URL}tr${number}`
+      const response = await axios.post(url, { formData, crn: crn }, {
+        headers: {
+          "auth-token": token
+        }
+      });
 
       if (response.data.success) {
-        toast.success("Form submitted successfully!");
+        toast.success('Form submitted successfully!');
         setIsSubmitting(false);
         setIsEditing(false);
-        setLoading(false);
-        selectedFiledata({});
+        setLoading(false)
+        selectedFiledata({})
       } else {
-        toast.error("Failed to submit form. Please try again later.");
+        toast.error('Failed to submit form. Please try again later.');
         setIsSubmitting(false);
-        setLoading(false);
-        selectedFiledata({});
+        setLoading(false)
+        selectedFiledata({})
       }
     } catch (error) {
-      console.error("Error submitting data:", error);
-      toast.error("An error occurred while submitting the form.");
+      console.error('Error submitting data:', error);
+      toast.error('An error occurred while submitting the form.');
       setIsSubmitting(false);
-      setLoading(false);
-      selectedFiledata({});
+      setLoading(false)
+      selectedFiledata({})
     }
   };
+  const noCertificateAvailable = () => {
+    toast.warning("No certificate Available")
+  }
 
   const handleViewCertificate = () => {
     if (certificate) {
       openBase64NewTab(certificate);
-    } else {
+    }
+    else {
       openBase64NewTab(formData.certificate);
     }
   };
@@ -204,37 +215,29 @@ export default function Form() {
   };
 
   const handleFileChange = (files) => {
-    selectedFiledata(files);
+    selectedFiledata(files)
     setFormData({ ...formData, certificate: files.base64 });
     setCertificate(files.base64);
-  };
+
+  }
 
   return (
     <>
       {loading && <LinearProgress />}
-      <Container style={{ marginBottom: "100px" }}>
-        <Container
-          style={{ paddingInline: 0, paddingBottom: 50, paddingTop: 10 }}
-        >
+      <Container style={{ marginBottom: "100px" }} >
+        <Container style={{ paddingInline: 0, paddingBottom: 50, paddingTop: 10 }}>
           {!isLock && (
             <Button
-              disabled={
-                loading ||
-                !formData.organization ||
-                !formData.certificate ||
-                !formData.organizationType ||
-                !formData.organization ||
-                !formData.projectName ||
-                !formData.technology
-              }
+              disabled={loading || (!formData.organization || !formData.certificate || !formData.organizationType || !formData.organization || !formData.projectName || !formData.technology)}
               onClick={handleEdit}
               color="primary"
               variant="contained"
               style={{
-                position: "relative",
-                float: "left",
+                position: 'relative',
+                float: 'left',
               }}
             >
+
               <EditIcon />
             </Button>
           )}
@@ -247,28 +250,19 @@ export default function Form() {
               endIcon={<KeyboardArrowRightIcon />}
               disabled={isSubmitting || loading}
               style={{
-                position: "relative",
-                float: "right",
+                position: 'relative',
+                float: 'right',
               }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Submit"
-              )}
+              {loading ? <CircularProgress size={24} color='inherit' /> : 'Submit'}
             </Button>
           )}
           {!isEditing && certificate && (
-            <Button
-              onClick={handleViewCertificate}
-              variant="outlined"
-              color="primary"
-              style={{
-                position: "relative",
-                float: "right",
-              }}
-            >
-              View Certificate
+            <Button onClick={optionalCertificate ? noCertificateAvailable : handleViewCertificate} variant="outlined" color="primary" style={{
+              position: 'relative',
+              float: 'right',
+            }}>
+              {optionalCertificate ? "No certificate" : "View Certificate"}
             </Button>
           )}
         </Container>
@@ -289,12 +283,8 @@ export default function Form() {
               sx={{ mb: 2 }}
               disabled={!isEditing || isSubmitting}
             >
-              <MenuItem value="Training">
-                Training / Internship Without Stipend
-              </MenuItem>
-              <MenuItem value="InternshipWithStipend">
-                Internship With Stipend
-              </MenuItem>
+              <MenuItem value="Training">Training / Internship Without Stipend</MenuItem>
+              <MenuItem value="InternshipWithStipend">Internship With Stipend</MenuItem>
               <MenuItem value="PaidTraining">Paid Training</MenuItem>
             </TextField>
             <TextField
@@ -312,11 +302,11 @@ export default function Form() {
               disabled={!isEditing || isSubmitting}
             >
               <MenuItem value="industry">Industrial</MenuItem>
-              <MenuItem value="gndec">
-                Institutional ( Guru Nanak Dev Engineering College , Ludhiana){" "}
-              </MenuItem>
+              <MenuItem value="gndec">Institutional ( Guru Nanak Dev Engineering College , Ludhiana) </MenuItem>
               <MenuItem value="other">Other Institutional</MenuItem>
             </TextField>
+
+
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -329,7 +319,7 @@ export default function Form() {
               onChange={handleChange}
               error={!!errors.organization}
               helperText={errors.organization}
-              style={{ marginBottom: "1rem" }}
+              style={{ marginBottom: '1rem' }}
               disabled={!isEditing || isSubmitting}
             />
             <TextField
@@ -342,17 +332,15 @@ export default function Form() {
               onChange={handleChange}
               error={!!errors.projectName}
               helperText={errors.projectName}
-              style={{ marginBottom: "1rem" }}
+              style={{ marginBottom: '1rem' }}
               disabled={!isEditing || isSubmitting}
             />
+
+
           </Grid>
+
         </Grid>
-        <Typography
-          variant="h6"
-          gutterBottom
-          textAlign={"left"}
-          disabled={!isEditing || isSubmitting}
-        >
+        <Typography variant="h6" gutterBottom textAlign={'left'} disabled={!isEditing || isSubmitting}>
           Technology used
         </Typography>
         <Autocomplete
@@ -365,7 +353,11 @@ export default function Form() {
           disabled={!isEditing || isSubmitting}
           renderTags={(value, getTagProps) =>
             value.map((option, index) => (
-              <Chip key={option} label={option} {...getTagProps({ index })} />
+              <Chip
+                key={option}
+                label={option}
+                {...getTagProps({ index })}
+              />
             ))
           }
           renderInput={(params) => (
@@ -379,18 +371,12 @@ export default function Form() {
             />
           )}
         />
-        {isEditing && (
+
+        {isEditing && !optionalCertificate && (
           <>
-            <Typography
-              variant="h6"
-              gutterBottom
-              textAlign="left"
-              marginTop={2}
-            >
+            <Typography variant="h6" gutterBottom textAlign="left" marginTop={2}>
               Upload Certificate <br />
-              <Typography style={{ fontSize: "14px" }}>
-                (in PDF format only / size less than 500Kb)
-              </Typography>
+              <Typography style={{ fontSize: '14px' }}>(in PDF format only / size less than 500Kb)</Typography>
             </Typography>
 
             <FileBase

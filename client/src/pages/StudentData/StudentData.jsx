@@ -305,8 +305,7 @@ const SuperAdminForm = () => {
         );
       }
       // Add the "Verified" and "Mark Verification" columns at the end
-      if (selectedTraining !== "all") {
-
+      if (selectedTraining !== "all" && selectedTraining !== "placementData") {
 
         customColumns.push(
           {
@@ -404,6 +403,7 @@ const SuperAdminForm = () => {
 
   // Function to handle refreshing data after verification status change
   const handleRefresh = () => {
+    console.log("handle refresh called");
     setRefresh((prevRefresh) => !prevRefresh);
   };
 
