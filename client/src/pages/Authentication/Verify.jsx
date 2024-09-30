@@ -16,7 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress'; // Import Circula
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL
-
+import { Alert } from '@mui/material';
 
 function Verify() {
   const navigate = useNavigate();
@@ -102,6 +102,11 @@ function Verify() {
     <Container component="main" maxWidth="xs" sx={{marginTop:2, marginBottom:10}}>
       <CssBaseline />
       <ToastContainer />
+      {showOTPField &&
+        <Alert severity="info" sx={{ mt: 2 }}>
+          It takes 2-3 minutes to receive OTP on GNDEC mail. Please be patient .
+        </Alert>
+      }
       <Box
         sx={{
           display: 'flex',

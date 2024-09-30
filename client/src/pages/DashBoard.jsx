@@ -191,7 +191,9 @@ export default function Form() {
             </Alert>
           ) : (
             <>
-
+              <Alert severity="info">
+                  If your batch is 2021-2025 fill Batch Start Year as 2021. ( Even if you are LEET student as well)
+                </Alert>
               <Button
                 style={{ float: 'right' }}
                 type='submit'
