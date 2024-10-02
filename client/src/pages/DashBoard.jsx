@@ -21,7 +21,7 @@ import { convertBatchToDate } from '../utils/DateConvertToFrontend';
 import Modal from '@mui/material/Modal';
 import { decodeAuthToken } from '../utils/AdminFunctions';
 import { validateField, errorMessages } from '../utils/ErrorFunctions';
-
+import { MENTORS } from '../utils/MentorData';
 const API_URL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL
 
 
@@ -65,7 +65,7 @@ export default function Form() {
           }
         });
         const userData = response.data.data;
-   
+
         // Check if all fields are filled in the fetched data
         if (
           userData.Name &&
@@ -83,7 +83,7 @@ export default function Form() {
         ) {
           const datePickerBatch = convertBatchToDate(userData.batch);
           setAdmissionYear(datePickerBatch);
-         
+
           setFormData({ ...userData, batch: datePickerBatch });
           setIsSubmitting(true)
 
@@ -142,7 +142,7 @@ export default function Form() {
           headers: {
             "auth-token": token
           }
-        });      
+        });
       if (response.data.success) {
         toast.success('Form submitted successfully!');
         setIsSubmitting(true);
@@ -185,15 +185,15 @@ export default function Form() {
         <ToastContainer />
         <Container style={{ paddingBottom: 30 }}>
           {isSubmitting ? (
-            <Alert severity="error">
+            <Alert severity="info" >
               <AlertTitle>This information is read only !</AlertTitle>
               You have already submitted the form. Contact the training coordinator for any changes.
             </Alert>
           ) : (
             <>
-              <Alert severity="info">
-                  If your batch is 2021-2025 fill Batch Start Year as 2021. ( Even if you are LEET student as well)
-                </Alert>
+              <Alert severity="info" sx={{ mb: 2 }}>
+                If your batch is 2021-2025 fill Batch Start Year as 2021. ( Even if you are LEET student as well)
+              </Alert>
               <Button
                 style={{ float: 'right' }}
                 type='submit'
@@ -340,32 +340,30 @@ export default function Form() {
               >
                 <MenuItem value="CSE">Computer Science & Engineering</MenuItem>
               </TextField>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Batch Start Year"
 
-                  views={['year']}
-                  renderInput={(params) => <TextField {...params} helperText="Enter starting year only" />}
-                  onChange={handleBatchChange}
-                  value={admissionYear}
-                  sx={{ mb: 2 }}
-                  disabled={isSubmitting}
-                />
-              </LocalizationProvider>
               <TextField
+                select
                 label="Mentor's Name"
                 variant="outlined"
                 fullWidth
                 required
                 name="mentor"
-                placeholder='Your Mentor Name'
                 value={formData.mentor}
                 onChange={(e) => setMentor(e.target.value)}
+                disabled={isSubmitting}
                 error={!!errors.mentor}
                 helperText={errors.mentor}
-                sx={{ mb: 2 }}
-                disabled={isSubmitting}
-              />
+                sx={{
+                  mb: 2,
+                  '& .MuiSelect-select': { textAlign: 'left' } // Aligns the selected value to the left
+                }}
+              >
+                {MENTORS.map((teacher, index) => (
+                  <MenuItem key={index} value={teacher}>
+                    {teacher}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField
                 select
                 label="Gender"
@@ -400,6 +398,18 @@ export default function Form() {
                 <MenuItem value="Non LEET">Non LEET</MenuItem>
                 <MenuItem value="LEET">LEET</MenuItem>
               </TextField>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Batch Start Year"
+                  views={['year']}
+                  renderInput={(params) => <TextField {...params} helperText="Enter starting year only" />}
+                  onChange={handleBatchChange}
+                  value={admissionYear}
+                  sx={{ mb: 2 }}
+                  disabled={isSubmitting}
+                />
+
+              </LocalizationProvider>
             </Grid>
           </Grid>
         </Container>
