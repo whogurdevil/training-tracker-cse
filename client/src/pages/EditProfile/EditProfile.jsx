@@ -24,6 +24,7 @@ import { convertBatchToDate } from "../../utils/DateConvertToFrontend";
 import { decodeAuthToken } from "../../utils/AdminFunctions";
 import VerifyStudent from "../../Components/AdminComponent/VerifyStudent";
 // API_URL should point to your backend API endpoint
+import { MENTORS } from "../../utils/MentorData";
 const API_URL =
   import.meta.env.VITE_ENV === "production"
     ? import.meta.env.VITE_PROD_BASE_URL
@@ -666,18 +667,24 @@ const EditProfile = () => {
                   </MenuItem>
                 </TextField>
                 <TextField
+                  select
                   label="Mentor's Name"
                   variant="outlined"
                   sx={{ mb: 2 }}
                   fullWidth
                   required
                   name="mentor"
-                  placeholder="Your Mentor Name"
                   value={userInfo?.mentor}
                   onChange={handleChangeuserInfo}
                   disabled={!isEditing}
                   InputLabelProps={{ shrink: true }}
-                />
+                >
+                  {MENTORS.map((teacher, index) => (
+                    <MenuItem key={index} value={teacher}>
+                      {teacher}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <TextField
                   select
                   label="Gender"
