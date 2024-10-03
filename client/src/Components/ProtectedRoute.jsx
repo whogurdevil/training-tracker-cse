@@ -15,6 +15,7 @@ import Login from "../pages/Authentication/Login";
 import Verify from "../pages/Authentication/Verify";
 import ForgotPassword from "../pages/Authentication/Forgotpassword"
 import Logs from "../pages/LogsPage/LogsPage";
+import MentorNames from "../pages/MentorNamesController/MentorNames";
 
 const ProtectedRoute = ({ component: Component, path, ...rest }) => {
     const authToken = localStorage.getItem("authtoken");
@@ -63,6 +64,9 @@ const ProtectedRoute = ({ component: Component, path, ...rest }) => {
                 else if (path === "/superadmin/placementStats") {
                     return <PlacementStats />;
                 }
+                else if (path === "/superadmin/mentors") {
+                    return <MentorNames />;
+                } 
                 else {
                     return <Navigate to="/superadmin" replace />;
                 }

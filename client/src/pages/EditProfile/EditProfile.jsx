@@ -23,8 +23,8 @@ import { validateField, errorMessages } from "../../utils/ErrorFunctions";
 import { convertBatchToDate } from "../../utils/DateConvertToFrontend";
 import { decodeAuthToken } from "../../utils/AdminFunctions";
 import VerifyStudent from "../../Components/AdminComponent/VerifyStudent";
+import { getMentors } from '../../utils/MentorData';
 // API_URL should point to your backend API endpoint
-import { MENTORS } from "../../utils/MentorData";
 const API_URL =
   import.meta.env.VITE_ENV === "production"
     ? import.meta.env.VITE_PROD_BASE_URL
@@ -47,6 +47,7 @@ const EditProfile = () => {
   const [showModal3, setShowModal3] = useState(false);
   const [admissionYear, setAdmissionYear] = useState(null);
   const [adminCrn, setAdminCrn] = useState(null)
+  const [MENTORS, setMentors] = useState([])
 
   const [passwordState, setPasswordState] = useState({
     password: "",
@@ -361,6 +362,14 @@ const EditProfile = () => {
       setToken(token)
       const AdminId = decodeAuthToken(token)
       setAdminCrn(AdminId)
+      const fetchMentors = async () => {
+        const token = localStorage.getItem('authtoken');
+        const mentorList = await getMentors(token);
+        console.log(mentorList)// Get mentors from the backend API
+        setMentors(mentorList);
+      };
+
+      fetchMentors();
     }
     , [])
 

@@ -21,7 +21,7 @@ import { convertBatchToDate } from '../utils/DateConvertToFrontend';
 import Modal from '@mui/material/Modal';
 import { decodeAuthToken } from '../utils/AdminFunctions';
 import { validateField, errorMessages } from '../utils/ErrorFunctions';
-import { MENTORS } from '../utils/MentorData';
+import { getMentors } from '../utils/MentorData';
 const API_URL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL
 
 
@@ -51,6 +51,7 @@ export default function Form() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [MENTORS, setMentors] = useState([])
   useEffect(() => {
     // Fetch data from the database when the component mounts or the page is refreshed
     const fetchData = async () => {
@@ -100,8 +101,14 @@ export default function Form() {
 
       }
     };
+    const fetchMentors = async () => {
+      const token = localStorage.getItem('authtoken');
+      const mentorList = await getMentors(token);
+      setMentors(mentorList);
+    };
 
     fetchData();
+    fetchMentors();
   }, []);
 
   // const [endDate, setEndDate] = useState(null);

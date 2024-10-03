@@ -31,6 +31,7 @@ const adminControl = require("./routes/adminControlRoutes/adminControl");
 const test = require("./routes/test.js");
 const certificate = require('./routes/getCertificate.js')
 const Logs = require('./routes/Logs/getLogs.js')
+const mentors = require('./routes/mentorRoutes/mentorRoutes.js')
 
 app.use("/api/userprofiles", userProfileRoutes);
 app.use("/api/tr101", tr101);
@@ -46,6 +47,7 @@ app.use("/api/admin", adminControl);
 app.use("/api/test", test);
 app.use("/api/certificate", certificate);
 app.use("/api/logs", Logs);
+app.use("/api/mentors", mentors);
 // Start the server
 const port = process.env.PORT;
 app.listen(port, () => {
