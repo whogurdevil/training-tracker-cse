@@ -18,9 +18,9 @@
 
 # TODO
 
-1. add clickable breadcrumbs for navigation (easy)
-2. setup ci/cd
-3. better state management
+1. Add clickable breadcrumbs for navigation (easy)
+2. Setup ci/cd
+3. Better state management
 
 ```bash
 git clone https://github.com/whogurdevil/training-tracker-cse
