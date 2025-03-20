@@ -8,7 +8,7 @@
 ```
 # Features
 
-- Two factor Authentication
+- Two factor Authentication 2FA
 - Custom CI/CD pipeline for GNDEC College Server
 - Storage of Certificate PDF's as base64 in database
 - Export Graphical Representation Data for efficient visualization.
