@@ -43,7 +43,7 @@ export default function PlacementForm() {
     const [AppointmentDate, SetAppointmentDate] = useState(null);
     const [isHighstudy, setHighstudy] = useState(null);
     const [gateStatus, setgateStatus] = useState(null);
-    const token = localStorage.getItem("authtoken");
+    const token = sessionStorage.getItem("authtoken");
     const crn = decodeAuthToken(token);
     const [errors, setErrors] = useState({});
     const [Gatefiledata, setGateFiledata] = useState({});
@@ -59,7 +59,7 @@ export default function PlacementForm() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const token = localStorage.getItem("authtoken");
+                const token = sessionStorage.getItem("authtoken");
                 const url = `${API_URL}placement/${crn}`;
                 const response = await axios.get(url, {
                     headers: {
@@ -164,7 +164,7 @@ export default function PlacementForm() {
                 }
             }
 
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             // Submit form data
             const response = await axios.post(
                 `${API_URL}placement`,

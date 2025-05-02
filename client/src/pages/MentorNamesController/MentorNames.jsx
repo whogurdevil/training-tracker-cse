@@ -33,7 +33,7 @@ const MentorNames = () => {
         const fetchMentors = async () => {
             setLoading(true);
             try {
-                const token = localStorage.getItem("authtoken");
+                const token = sessionStorage.getItem("authtoken");
                 const mentorData = await getMentorsWithId(token);
                 setMentors(mentorData); // Ensure mentorData is correctly set
             } catch (error) {
@@ -50,7 +50,7 @@ const MentorNames = () => {
         setLoading(true);
         try {
             const upperCaseMentor = newMentor.toUpperCase();
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             const response = await axios.post(
                 `${API_URL}mentors/addmentor`,
                 { name: upperCaseMentor },
@@ -89,7 +89,7 @@ const MentorNames = () => {
         setLoading(true);
         try {
             const editedUpperCaseName = editingName.toUpperCase();
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             const response = await axios.put(
                 `${API_URL}mentors/editmentor/${mentors[editingIndex]._id}`,
                 { name: editedUpperCaseName },
@@ -125,7 +125,7 @@ const MentorNames = () => {
     const handleDeleteMentor = async (index) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             const mentorId = mentors[index]._id;
             console.log(mentors[index]);
             const response = await axios.delete(

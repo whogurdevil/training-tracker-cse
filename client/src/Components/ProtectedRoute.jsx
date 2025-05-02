@@ -18,7 +18,7 @@ import Logs from "../pages/LogsPage/LogsPage";
 import MentorNames from "../pages/MentorNamesController/MentorNames";
 
 const ProtectedRoute = ({ component: Component, path, ...rest }) => {
-    const authToken = localStorage.getItem("authtoken");
+    const authToken = sessionStorage.getItem("authtoken");
 
     if (!authToken) {
         if (path === "/signup") {

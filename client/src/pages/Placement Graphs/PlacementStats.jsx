@@ -23,7 +23,7 @@ const PlacementStats = () => {
         const fetchData = async () => {
             setLoading(true); // Start loading
             try {
-                const token = localStorage.getItem("authtoken");
+                const token = sessionStorage.getItem("authtoken");
                 const response = await axios.get(`${API_URL}users/getUsersByPreviousBatches`, {
                     headers: {
                         "auth-token": token,

@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 
 export const fetchBatches = async () => {
     try {
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         const response = await axios.get(`${API_URL}admin/getBatches`, {
             headers: {
                 "auth-token": token,
@@ -33,7 +33,7 @@ export const fetchBatches = async () => {
 
 export const fetchUsers = async (selectedBatch, selectedTraining) => {
     try {
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         const response = await axios.get(`${API_URL}users/getUsersByBatch`, {
             headers: {
                 "auth-token": token,
@@ -59,7 +59,7 @@ export const changeLock = async (
     selectedTraining,
 ) => {
     try {
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         let url = "";
         let data = {};
 
@@ -180,7 +180,7 @@ export const decodeUserRole = (token) => {
 
 export const getAllData = async () => {
     try {
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         const response = await axios.get(`${API_URL}users/getallusers`, {
             headers: {
                 "auth-token": token,
@@ -197,7 +197,7 @@ export const getAllData = async () => {
 };
 export const getAllLogs = async () => {
     try {
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         const response = await axios.get(`${API_URL}logs/getalllogs`, {
             headers: {
                 "auth-token": token,

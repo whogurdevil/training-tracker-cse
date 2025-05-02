@@ -67,7 +67,7 @@ const SuperAdminForm = () => {
 
   const [role, setRole] = useState("");
   useEffect(() => {
-    const token = localStorage.getItem("authtoken");
+    const token = sessionStorage.getItem("authtoken");
     const role = decodeUserRole(token);
     setRole(role);
     const fetchData = async () => {

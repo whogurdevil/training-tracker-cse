@@ -61,7 +61,7 @@ const SuperAdminForm = () => {
   const navigateToLogs = () => navigate("/superadmin/logs");
   const navigateToMentors = () => navigate("/superadmin/mentors");
   useEffect(() => {
-    const token = localStorage.getItem("authtoken");
+    const token = sessionStorage.getItem("authtoken");
     const decodedRole = decodeUserRole(token);
     setRole(decodedRole);
   }, []);

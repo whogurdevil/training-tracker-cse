@@ -41,7 +41,7 @@ const TrainingNames = () => {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             const url = `${API_URL}admin/trainingNames`
             const response = await axios.post(url, trainingNames, {
                 headers: {

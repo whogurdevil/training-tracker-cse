@@ -358,12 +358,12 @@ const EditProfile = () => {
   };
   useEffect(
     () => {
-      const token = localStorage.getItem("authtoken");
+      const token = sessionStorage.getItem("authtoken");
       setToken(token)
       const AdminId = decodeAuthToken(token)
       setAdminCrn(AdminId)
       const fetchMentors = async () => {
-        const token = localStorage.getItem('authtoken');
+        const token = sessionStorage.getItem('authtoken');
         const mentorList = await getMentors(token);
         console.log(mentorList)// Get mentors from the backend API
         setMentors(mentorList);

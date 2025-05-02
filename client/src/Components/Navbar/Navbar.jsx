@@ -18,8 +18,8 @@ function Navbar() {
   const handleClose = () => setOpen(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('authtoken'); // Remove authentication token
-    localStorage.removeItem('userId'); // Remove user ID or any other relevant data
+    sessionStorage.removeItem('authtoken'); // Remove authentication token
+    sessionStorage.removeItem('userId'); // Remove user ID or any other relevant data
     toast('Successfully logged out');
     navigate('/login')
     setOpen(false)

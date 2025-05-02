@@ -52,7 +52,7 @@ export default function Form() {
           setOptionCertificate(true)
         }
         setLoading(true)
-        const token = localStorage.getItem("authtoken");
+        const token = sessionStorage.getItem("authtoken");
         const crn = decodeAuthToken(token);
         const response = await axios.get(`${API_URL}tr${number}/${crn}`, {
           headers: {
@@ -177,7 +177,7 @@ export default function Form() {
         setLoading(false)
         return;
       }
-      const token = localStorage.getItem("authtoken");
+      const token = sessionStorage.getItem("authtoken");
       const crn = decodeAuthToken(token);
       const url = `${API_URL}tr${number}`
       const response = await axios.post(url, { formData, crn: crn }, {

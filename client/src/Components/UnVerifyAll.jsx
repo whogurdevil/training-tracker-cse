@@ -18,7 +18,7 @@ const UnVerifyAllComponent = ({ selectedTraining, onRefresh, refresh, batch }) =
     const handleConfirmUnVerifyAll = async () => {
         try {
             setLoading(true)
-            const token = localStorage.getItem('authtoken');
+            const token = sessionStorage.getItem('authtoken');
             let url = '';
 
             if (selectedTraining === 'placementData') {

@@ -44,7 +44,7 @@ export default function Form() {
 
   });
 
-  const token = localStorage.getItem("authtoken");
+  const token = sessionStorage.getItem("authtoken");
   const crn = decodeAuthToken(token);
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [admissionYear, setAdmissionYear] = useState(null);
@@ -58,7 +58,7 @@ export default function Form() {
 
       try {
         setLoading(true)
-        const token = localStorage.getItem('authtoken');
+        const token = sessionStorage.getItem('authtoken');
         const url = `${API_URL}userprofiles/${crn}`;
         const response = await axios.get(url, {
           headers: {
@@ -102,7 +102,7 @@ export default function Form() {
       }
     };
     const fetchMentors = async () => {
-      const token = localStorage.getItem('authtoken');
+      const token = sessionStorage.getItem('authtoken');
       const mentorList = await getMentors(token);
       setMentors(mentorList);
     };
@@ -143,7 +143,7 @@ export default function Form() {
         setLoading(false);
         return;
       }
-      const token = localStorage.getItem('authtoken');
+      const token = sessionStorage.getItem('authtoken');
       const response = await axios.post(`${API_URL}userprofiles`, { formData, crn: crn },
         {
           headers: {

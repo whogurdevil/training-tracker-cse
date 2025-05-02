@@ -26,7 +26,7 @@ const VerifyAllComponent = ({ selectedTraining, refresh, onRefresh, batch }) => 
     const handleConfirmVerifyAll = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem("authtoken");
+            const token = sessionStorage.getItem("authtoken");
             let url = "";
 
             if (selectedTraining === "placementData") {

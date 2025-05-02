@@ -33,7 +33,7 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("authtoken");
+    const isLoggedIn = sessionStorage.getItem("authtoken");
     if (isLoggedIn) {
       navigate("/home");
     }
@@ -82,7 +82,7 @@ function Login() {
             navigate("/verify");
           }, 2000);
         } else {
-          localStorage.setItem("authtoken", json.authtoken);
+          sessionStorage.setItem("authtoken", json.authtoken);
           const role = decodeUserRole(json.authtoken)
           if (role === "superadmin" || role === "admin") {
             toast.success("Successfully logged in");

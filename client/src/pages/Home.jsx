@@ -18,7 +18,7 @@ const Home = () => {
     useEffect(() => {
         const fetchBatchYear = async () => {
             try {
-                const token = localStorage.getItem("authtoken");
+                const token = sessionStorage.getItem("authtoken");
                 const crn = decodeAuthToken(token);
                 const url = `${API_URL}users/getuser/${crn}`
                 const response = await axios.get(url, {
