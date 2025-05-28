@@ -265,7 +265,7 @@ export default function Form() {
               {loading ? <CircularProgress size={24} color='inherit' /> : 'Submit'}
             </Button>
           )}
-          {!isEditing && certificate && (
+          {(!isEditing || certificate) && (
             <Button onClick={optionalCertificate ? noCertificateAvailable : handleViewCertificate} variant="outlined" color="primary" style={{
               position: 'relative',
               float: 'right',
