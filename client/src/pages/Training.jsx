@@ -200,7 +200,7 @@ export default function Form() {
       }
     } catch (error) {
       console.error('Error submitting data:', error);
-      toast.error('An error occurred while submitting the form.');
+      toast.error(response.data.message);
       setIsSubmitting(false);
       setLoading(false)
       selectedFiledata({})
